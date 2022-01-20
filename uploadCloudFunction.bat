@@ -1,0 +1,1 @@
+"D:\Program Files (x86)\Tencent\微信web开发者工具2\cli.bat" cloud functions deploy --e dev-2gaq3asbb0f99332 --n quickstartFunctions --r --project "D:\xyz\workspace\solitaire" --report_first --report

@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/setup/setup",
+    "pages/query/query",
+    "pages/test13/test13"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#000000",
+    "navigationBarTitleText": "接龙查询",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#FFFFFF",
+    "selectedColor": "#FFA500",
+    "backgroundColor": "#000000",
+    "list": [
+      {
+        "pagePath": "pages/query/query",
+        "iconPath": "images/meihua.jpg",
+        "selectedIconPath": "images/meihua.jpg",
+        "text": "查询"
+      },
+      {
+        "pagePath": "pages/setup/setup",
+        "iconPath": "images/lanhua.jpg",
+        "selectedIconPath": "images/lanhua.jpg",
+        "text": "设置"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}
