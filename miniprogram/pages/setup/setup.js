@@ -10,7 +10,6 @@ Page({
   },
 
   solitaireActivation: function (e) {
-    console.log(e.detail.value);
     if (e.detail.value) {
       this.solitaireUpdate(e.currentTarget.dataset.id, true);
     } else {
@@ -43,7 +42,6 @@ Page({
   },
 
   add: function () {
-    console.log(this.data.solitaireSize);
     this.setData({
       termShow: true
     })
@@ -63,7 +61,6 @@ Page({
     let flag = this.parameterJudge(name, roster);
     if (flag) {
       let nameArray = this.getNameArray(roster);
-      console.log(nameArray);
 
       this.solitaireAddDB(name, nameArray);
 
@@ -73,6 +70,16 @@ Page({
     }
   },
 
+  solitaireDelete: function (e) {
+    db.collection('solitaire').doc(e.currentTarget.dataset.id).remove({
+      success: res => {
+        this.solitaireQuery();
+      },
+      fail: err => {
+        console.error('数据库删除失败：', err)
+      }
+    })
+  },
 
   solitaireAddDB: function (name, nameArray) {
     let activation = false;
@@ -100,7 +107,6 @@ Page({
   solitaireQuery: function () {
     db.collection('solitaire').get({
       success: res => {
-        console.log(res.data);
         let solitaireList = res.data;
         let solitaireActivationId = "";
         for (let x in solitaireList) {
@@ -109,7 +115,8 @@ Page({
             break;
           }
         }
-        console.log(solitaireActivationId);
+        this.solitaireByIdQuery_sub(solitaireActivationId);
+
         this.setData({
           solitaireActivationId: solitaireActivationId,
           solitaireSize: res.data.length,
@@ -119,13 +126,72 @@ Page({
     })
   },
 
+  solitaireByIdQuery: function (e) {
+    this.solitaireByIdQuery_sub(e.currentTarget.dataset.id);
+  },
+
+  
+  solitaireByIdQuery_sub: function (id) {
+    db.collection('solitaire').where({
+      _id: id
+    }).get({
+      success: res => {
+        let nameArray = res.data[0].nameArray;
+
+        let nameList = [];
+        let nameMap = {};
+        let m = 0;
+        for (let x in nameArray) {
+          m = m + 1;
+          if (m == 1) {
+            nameMap['name1'] = nameArray[x];
+          } else if (m == 2) {
+            nameMap['name2'] = nameArray[x];
+          } else if (m == 3) {
+            nameMap['name3'] = nameArray[x];
+          } else if (m == 4) {
+            nameMap['name4'] = nameArray[x];
+            nameList.push(nameMap);
+            m = 0;
+            nameMap = {};
+          }
+        }
+
+        if (nameList.length * 4 < nameArray.length) {
+          if (typeof (nameArray[nameList.length * 4]) != "undefined") {
+            nameMap["name1"] = nameArray[nameList.length * 4];
+          }
+
+          if (typeof (nameArray[nameList.length * 4 + 1]) != "undefined") {
+            nameMap["name2"] = nameArray[nameList.length * 4 + 1];
+          }
+
+          if (typeof (nameArray[nameList.length * 4 + 2]) != "undefined") {
+            nameMap["name3"] = nameArray[nameList.length * 4 + 2];
+          }
+
+          if (typeof (nameArray[nameList.length * 4 + 3]) != "undefined") {
+            nameMap["name4"] = nameArray[nameList.length * 4 + 3];
+          }
+
+          nameList.push(nameMap);
+        }
+        
+        this.setData({
+          nameList: nameList,
+          total: nameArray.length,
+          groupName: res.data[0].name,
+          groupFlag: true
+        })
+      }
+    })
+  },
 
   addDB: function (name, roster) {
     // wx.cloud.callFunction({
     //   name: 'getUserInfo',
     //   complete: res => {
     //     let openid = res.result.openid;
-    //     console.log(openid);
 
     //     // wx.cloud.callFunction({
     //     //   name: 'statistics',
@@ -155,7 +221,6 @@ Page({
     }
 
     rosterList.splice(0, m);
-    console.log(rosterList);
     let nameArray = [];
     for (let x in rosterList) {
       let name = rosterList[x];

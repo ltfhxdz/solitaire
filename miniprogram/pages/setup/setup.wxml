@@ -11,7 +11,7 @@
   <block wx:for="{{solitaireList}}" wx:key="id">
     <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
       <view class="td-1">{{index+1}}</view>
-      <view class="td-2  bold" catchtap="addActivity" data-name="{{item.name}}" data-id="{{item._id}}">{{item.name}}</view>
+      <view class="td-2  bold" catchtap="solitaireByIdQuery" data-name="{{item.name}}" data-id="{{item._id}}">{{item.name}}</view>
       <view class="td-3">
         <switch bindchange="solitaireActivation" data-id="{{item._id}}" checked="{{item.activation}}"></switch>
       </view>
@@ -21,7 +21,7 @@
     </view>
     <view class="tr bg-g2" wx:else>
       <view class="td-1">{{index+1}}</view>
-      <view class="td-2  bold" catchtap="addActivity" data-name="{{item.name}}" data-id="{{item._id}}">{{item.name}}</view>
+      <view class="td-2  bold" catchtap="solitaireByIdQuery" data-name="{{item.name}}" data-id="{{item._id}}">{{item.name}}</view>
       <view class="td-3">
         <switch bindchange="solitaireActivation" data-id="{{item._id}}" checked="{{item.activation}}"></switch>
       </view>
@@ -51,4 +51,18 @@
       </view>
     </view>
   </form>
+</view>
+
+
+<view class="table" wx:if="{{groupFlag}}">
+  <view class="tr bg-w bold"><label>{{groupName}}组，共{{total}}人</label></view>
+
+  <block wx:for="{{nameList}}" wx:key="id">
+    <view class="tr bg-g">
+      <view class="td-x">{{item.name1}}</view>
+      <view class="td-x">{{item.name2}}</view>
+      <view class="td-x">{{item.name3}}</view>
+      <view class="td-x">{{item.name4}}</view>
+    </view>
+  </block>
 </view>
