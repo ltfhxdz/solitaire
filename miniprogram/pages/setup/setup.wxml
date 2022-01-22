@@ -8,25 +8,25 @@
     </view>
   </view>
 
-  <block wx:for="{{bigList}}" wx:key="id">
+  <block wx:for="{{solitaireList}}" wx:key="id">
     <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
       <view class="td-1">{{index+1}}</view>
       <view class="td-2  bold" catchtap="addActivity" data-name="{{item.name}}" data-id="{{item._id}}">{{item.name}}</view>
       <view class="td-3">
-        <switch bindchange="bigActivation" data-id="{{item._id}}" checked="{{item.activation}}"></switch>
+        <switch bindchange="solitaireActivation" data-id="{{item._id}}" checked="{{item.activation}}"></switch>
       </view>
       <view class="td-4">
-        <image src='/images/delete.jpg' class="deleteImage" catchtap='bigDelete' data-id="{{item._id}}"></image>
+        <image src='/images/delete.jpg' class="deleteImage" catchtap='solitaireDelete' data-id="{{item._id}}"></image>
       </view>
     </view>
     <view class="tr bg-g2" wx:else>
       <view class="td-1">{{index+1}}</view>
       <view class="td-2  bold" catchtap="addActivity" data-name="{{item.name}}" data-id="{{item._id}}">{{item.name}}</view>
       <view class="td-3">
-        <switch bindchange="bigActivation" data-id="{{item._id}}" checked="{{item.activation}}"></switch>
+        <switch bindchange="solitaireActivation" data-id="{{item._id}}" checked="{{item.activation}}"></switch>
       </view>
       <view class="td-4">
-        <image src='/images/delete.jpg' class="deleteImage" catchtap='bigDelete' data-id="{{item._id}}"></image>
+        <image src='/images/delete.jpg' class="deleteImage" catchtap='solitaireDelete' data-id="{{item._id}}"></image>
       </view>
     </view>
   </block>
@@ -38,11 +38,11 @@
   <form bindsubmit="onSubmit" bindreset="">
     <view class="container">
       <view class='title'>
-        <input name="name" placeholder="在此输入群组名称" />
+        <input name="name" placeholder="在此输入群组名称" value="木棉" />
       </view>
 
       <view class='row'>
-        <textarea maxlength="-1"  class='text'  name="roster" placeholder="在此输入接龙的全员名单"  />
+        <textarea maxlength="-1" class='text' name="roster" placeholder="复制一个完整的接龙数据，粘贴在此处" />
       </view>
 
       <view class='bottom'>

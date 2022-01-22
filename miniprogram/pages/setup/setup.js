@@ -9,8 +9,41 @@ Page({
 
   },
 
+  solitaireActivation: function (e) {
+    console.log(e.detail.value);
+    if (e.detail.value) {
+      this.solitaireUpdate(e.currentTarget.dataset.id, true);
+    } else {
+      this.solitaireUpdate(e.currentTarget.dataset.id, false);
+    }
+  },
+
+  solitaireUpdate: function (id, activation) {
+    db.collection('solitaire').doc(id).update({
+      data: {
+        activation: activation
+      },
+      success: res => {
+        db.collection('solitaire').doc(this.data.solitaireActivationId).update({
+          data: {
+            activation: false
+          },
+          success: res => {
+            this.solitaireQuery();
+          },
+          fail: err => {
+            console.error('数据库更新失败：', err)
+          }
+        })
+      },
+      fail: err => {
+        console.error('数据库更新失败：', err)
+      }
+    })
+  },
 
   add: function () {
+    console.log(this.data.solitaireSize);
     this.setData({
       termShow: true
     })
@@ -29,38 +62,108 @@ Page({
 
     let flag = this.parameterJudge(name, roster);
     if (flag) {
+      let nameArray = this.getNameArray(roster);
+      console.log(nameArray);
 
-      this.addDB(name, roster);
+      this.solitaireAddDB(name, nameArray);
 
       this.setData({
         termShow: false
       })
     }
+  },
 
 
+  solitaireAddDB: function (name, nameArray) {
+    let activation = false;
+    if (this.data.solitaireSize == 0) {
+      activation = true;
+    }
+
+    db.collection('solitaire').add({
+      data: {
+        name: name,
+        nameArray: nameArray,
+        activation: activation,
+        create_date: db.serverDate()
+      },
+      success: res => {
+        this.solitaireQuery();
+      },
+      fail: err => {
+        console.error('数据库新增失败：', err)
+      }
+    })
+  },
+
+
+  solitaireQuery: function () {
+    db.collection('solitaire').get({
+      success: res => {
+        console.log(res.data);
+        let solitaireList = res.data;
+        let solitaireActivationId = "";
+        for (let x in solitaireList) {
+          if (solitaireList[x].activation) {
+            solitaireActivationId = solitaireList[x]._id;
+            break;
+          }
+        }
+        console.log(solitaireActivationId);
+        this.setData({
+          solitaireActivationId: solitaireActivationId,
+          solitaireSize: res.data.length,
+          solitaireList: res.data
+        })
+      }
+    })
   },
 
 
   addDB: function (name, roster) {
-    wx.cloud.callFunction({
-      name: 'getUserInfo',
-      complete: res => {
-        let openid = res.result.openid;
-        console.log(openid);
+    // wx.cloud.callFunction({
+    //   name: 'getUserInfo',
+    //   complete: res => {
+    //     let openid = res.result.openid;
+    //     console.log(openid);
 
-        // wx.cloud.callFunction({
-        //   name: 'statistics',
-        //   data: {
-        //     openid: openid
-        //   },
-        //   complete: res => {
-        //     this.setData({
-        //       statisticsList: res.result
-        //     })
-        //   }
-        // })
+    //     // wx.cloud.callFunction({
+    //     //   name: 'statistics',
+    //     //   data: {
+    //     //     openid: openid
+    //     //   },
+    //     //   complete: res => {
+    //     //     this.setData({
+    //     //       statisticsList: res.result
+    //     //     })
+    //     //   }
+    //     // })
+    //   }
+    // })
+  },
+
+  getNameArray: function (roster) {
+    let rosterList = roster.split("\n");
+    let m = -1;
+    for (let x in rosterList) {
+      m++;
+      let name = rosterList[x].replace(/(^\s*)|(\s*$)/g, "");
+      var start = name.indexOf("1.");
+      if (start == 0) {
+        break;
       }
-    })
+    }
+
+    rosterList.splice(0, m);
+    console.log(rosterList);
+    let nameArray = [];
+    for (let x in rosterList) {
+      let name = rosterList[x];
+      let nameList = name.split(".");
+      nameArray.push(nameList[1].replace(/(^\s*)|(\s*$)/g, ""));
+    }
+
+    return nameArray;
   },
 
   parameterJudge: function (name, roster) {
@@ -105,7 +208,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.add();
+    this.solitaireQuery();
   },
 
   /**

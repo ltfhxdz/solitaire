@@ -1,8 +1,7 @@
 {
   "pages": [
     "pages/setup/setup",
-    "pages/query/query",
-    "pages/test13/test13"
+    "pages/query/query"
   ],
   "window": {
     "backgroundTextStyle": "dark",
