@@ -90,7 +90,7 @@ Page({
     db.collection('solitaire').add({
       data: {
         name: name,
-        nameArray: nameArray,
+        nameArray: nameArray.sort((a,b)=>a.localeCompare(b)),
         activation: activation,
         create_date: db.serverDate()
       },
@@ -130,7 +130,7 @@ Page({
     this.solitaireByIdQuery_sub(e.currentTarget.dataset.id);
   },
 
-  
+
   solitaireByIdQuery_sub: function (id) {
     db.collection('solitaire').where({
       _id: id
@@ -176,7 +176,7 @@ Page({
 
           nameList.push(nameMap);
         }
-        
+
         this.setData({
           nameList: nameList,
           total: nameArray.length,
