@@ -43,13 +43,13 @@ Page({
 
   add: function () {
     this.setData({
-      termShow: true
+      solitaireShow: true
     })
   },
 
   addCancel: function () {
     this.setData({
-      termShow: false
+      solitaireShow: false
     })
   },
 
@@ -65,7 +65,7 @@ Page({
       this.solitaireAddDB(name, nameArray);
 
       this.setData({
-        termShow: false
+        solitaireShow: false
       })
     }
   },
@@ -308,13 +308,13 @@ Page({
    * 允许用户点击右上角分享给朋友
    */
   onShareAppMessage: function () {
-    title: '强身打卡：记录每一次健身，给增肌提供数据。'
+    title: '查询未接龙的名单'
   },
   /**
    * 允许用户右上角分享到朋友圈
    */
   onShareTimeline: function () {
-    title: '强身打卡：记录每一次健身，给增肌提供数据。'
+    title: '查询未接龙的名单'
   }
 
 })

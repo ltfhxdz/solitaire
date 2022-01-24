@@ -1,12 +1,12 @@
 {
   "pages": [
-    "pages/setup/setup",
-    "pages/query/query"
+    "pages/query/query",
+    "pages/setup/setup"
   ],
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#000000",
-    "navigationBarTitleText": "接龙查询",
+    "navigationBarTitleText": "接龙速查",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {

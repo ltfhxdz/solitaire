@@ -32,13 +32,13 @@
   </block>
 </view>
 
-<view class="mask" style="{{termShow?'z-index: 1;opacity:0.8':''}}" catchtap="addCancel">
+<view class="mask" style="{{solitaireShow?'z-index: 1;opacity:0.8':''}}" catchtap="addCancel">
 </view>
-<view class='modalBg' wx:if="{{termShow}}">
+<view class='modalBg' wx:if="{{solitaireShow}}">
   <form bindsubmit="onSubmit" bindreset="">
     <view class="container">
       <view class='title'>
-        <input name="name" placeholder="在此输入群组名称" value="木棉" />
+        <input name="name" placeholder="在此输入群组名称" />
       </view>
 
       <view class='row'>
