@@ -10,10 +10,20 @@ Page({
   },
 
   solitaireActivation: function (e) {
+    if (!e.detail.value) {
+      wx.showToast({
+        title: '请选择需要激活的记录',
+        icon: 'none',
+        duration: 2000,
+        mask: true
+      });
+
+      this.solitaireQuery();
+      return;
+    }
+
     if (e.detail.value) {
       this.solitaireUpdate(e.currentTarget.dataset.id, true);
-    } else {
-      this.solitaireUpdate(e.currentTarget.dataset.id, false);
     }
   },
 
@@ -71,6 +81,16 @@ Page({
   },
 
   solitaireDelete: function (e) {
+    if (this.data.solitaireList.length > 1 && e.currentTarget.dataset.activation) {
+      wx.showToast({
+        title: '不能删除激活的记录',
+        icon: 'none',
+        duration: 2000,
+        mask: true
+      });
+      return;
+    }
+
     db.collection('solitaire').doc(e.currentTarget.dataset.id).remove({
       success: res => {
         this.solitaireQuery();
@@ -90,7 +110,7 @@ Page({
     db.collection('solitaire').add({
       data: {
         name: name,
-        nameArray: nameArray.sort((a,b)=>a.localeCompare(b)),
+        nameArray: nameArray.sort((a, b) => a.localeCompare(b)),
         activation: activation,
         create_date: db.serverDate()
       },
@@ -105,7 +125,7 @@ Page({
 
 
   solitaireQuery: function () {
-    db.collection('solitaire').get({
+    db.collection('solitaire').orderBy('create_date', 'asc').get({
       success: res => {
         let solitaireList = res.data;
         let solitaireActivationId = "";
@@ -122,6 +142,12 @@ Page({
           solitaireSize: res.data.length,
           solitaireList: res.data
         })
+
+        if (solitaireList.length == 0) {
+          this.setData({
+            groupFlag: false
+          })
+        }
       }
     })
   },
@@ -256,6 +282,13 @@ Page({
   },
 
   /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    this.solitaireQuery();
+  },
+
+  /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
@@ -267,13 +300,6 @@ Page({
    */
   onReady: function () {
 
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-    this.solitaireQuery();
   },
 
   /**

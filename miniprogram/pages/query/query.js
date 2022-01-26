@@ -9,6 +9,8 @@ Page({
 
   },
 
+
+
   onSubmit: function (e) {
     let name = e.detail.value.name.replace(/(^\s*)|(\s*$)/g, "");
     let roster = e.detail.value.roster.replace(/(^\s*)|(\s*$)/g, "");
@@ -20,12 +22,21 @@ Page({
       this.solitaireAddDB(name, nameArray);
 
       this.setData({
-        solitaireShow: true,
+        name: name,
+        solitaireShow: false,
         initShow: false
       })
     }
   },
 
+  query: function () {
+    this.setData({
+      noSolitaireFlag: false,
+      solitaireShow: true,
+      initShow: false,
+      groupFlag: false
+    })
+  },
 
   solitaireAddDB: function (name, nameArray) {
     db.collection('solitaire').add({
@@ -36,10 +47,67 @@ Page({
         create_date: db.serverDate()
       },
       success: res => {
-        this.solitaireQuery();
+        this.solitaireByIdQuery_sub(res._id);
       },
       fail: err => {
         console.error('数据库新增失败：', err)
+      }
+    })
+  },
+
+
+  solitaireByIdQuery_sub: function (id) {
+    db.collection('solitaire').where({
+      _id: id
+    }).get({
+      success: res => {
+        let nameArray = res.data[0].nameArray;
+
+        let nameList = [];
+        let nameMap = {};
+        let m = 0;
+        for (let x in nameArray) {
+          m = m + 1;
+          if (m == 1) {
+            nameMap['name1'] = nameArray[x];
+          } else if (m == 2) {
+            nameMap['name2'] = nameArray[x];
+          } else if (m == 3) {
+            nameMap['name3'] = nameArray[x];
+          } else if (m == 4) {
+            nameMap['name4'] = nameArray[x];
+            nameList.push(nameMap);
+            m = 0;
+            nameMap = {};
+          }
+        }
+
+        if (nameList.length * 4 < nameArray.length) {
+          if (typeof (nameArray[nameList.length * 4]) != "undefined") {
+            nameMap["name1"] = nameArray[nameList.length * 4];
+          }
+
+          if (typeof (nameArray[nameList.length * 4 + 1]) != "undefined") {
+            nameMap["name2"] = nameArray[nameList.length * 4 + 1];
+          }
+
+          if (typeof (nameArray[nameList.length * 4 + 2]) != "undefined") {
+            nameMap["name3"] = nameArray[nameList.length * 4 + 2];
+          }
+
+          if (typeof (nameArray[nameList.length * 4 + 3]) != "undefined") {
+            nameMap["name4"] = nameArray[nameList.length * 4 + 3];
+          }
+
+          nameList.push(nameMap);
+        }
+
+        this.setData({
+          nameList: nameList,
+          total: nameArray.length,
+          groupName: res.data[0].name,
+          groupFlag: true
+        })
       }
     })
   },
@@ -103,7 +171,7 @@ Page({
   cancel: function () {
     this.setData({
       groupValue: "",
-      groupFlag: false
+      noSolitaireFlag: false
     })
   },
 
@@ -133,7 +201,8 @@ Page({
       this.arraySwitch(noSolitaireArray);
 
       this.setData({
-        groupFlag: true
+        noSolitaireFlag: true,
+        solitaireShow: false
       })
     }
   },
@@ -160,7 +229,8 @@ Page({
         let solitaireList = res.data;
         if (solitaireList.length == 0) {
           this.setData({
-            initShow: true
+            initShow: true,
+            solitaireShow: false
           })
         } else {
           this.setData({
@@ -215,9 +285,9 @@ Page({
     }
 
     this.setData({
-      nameList: nameList,
-      total: nameArray.length,
-      groupFlag: true
+      noSolitaireNameList: nameList,
+      noSolitaireTotal: nameArray.length,
+      noSolitaireFlag: true
     })
   },
 

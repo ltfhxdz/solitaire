@@ -14,7 +14,6 @@
 }
 
 .table {
-  border: 1px solid darkgray;
   width: 100%;
   margin-top: 50rpx;
 }

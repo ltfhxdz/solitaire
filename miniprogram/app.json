@@ -13,8 +13,7 @@
     "color": "#FFFFFF",
     "selectedColor": "#FFA500",
     "backgroundColor": "#000000",
-    "list": [
-      {
+    "list": [{
         "pagePath": "pages/query/query",
         "iconPath": "images/meihua.jpg",
         "selectedIconPath": "images/meihua.jpg",

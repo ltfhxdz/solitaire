@@ -4,11 +4,11 @@
   <form bindsubmit="onSubmit" bindreset="">
     <view class="container">
       <view class='title'>
-        <input name="name" placeholder="在此输入群组名称"  value="{{initName}}" />
+        <input name="name" placeholder="在此输入群组名称" value="{{initName}}" />
       </view>
 
       <view class='row'>
-        <textarea maxlength="-1" class='text' name="roster" placeholder="复制一个完整的接龙数据，粘贴在此处"  value="{{initRoster}}" />
+        <textarea maxlength="-1" class='text' name="roster" placeholder="复制一个全员的接龙数据，粘贴在此处" value="{{initRoster}}" />
       </view>
 
       <view class='bottom'>
@@ -23,7 +23,7 @@
   <form bindsubmit="onQuery">
     <view class="container">
       <view class='title'>
-        <input name="QueryName" value="查询{{name}}组：未接龙的人员" />
+        <input name="QueryName" value="查询{{name}}：未接龙的人员" />
       </view>
 
       <view class='row'>
@@ -40,8 +40,25 @@
 
 
 
+<view class="table" wx:if="{{noSolitaireFlag}}">
+  <view class="tr bg-w bold"><label>{{name}}：共{{noSolitaireTotal}}人未接龙</label></view>
+
+  <block wx:for="{{noSolitaireNameList}}" wx:key="id">
+    <view class="tr bg-g">
+      <view class="td-x">{{item.name1}}</view>
+      <view class="td-x">{{item.name2}}</view>
+      <view class="td-x">{{item.name3}}</view>
+      <view class="td-x">{{item.name4}}</view>
+    </view>
+  </block>
+  <view class='bottom'>
+    <button class='btn del' bindtap="query">继续查询</button>
+  </view>
+</view>
+
+
 <view class="table" wx:if="{{groupFlag}}">
-  <view class="tr bg-w bold"><label>{{name}}组，共{{total}}人未接龙</label></view>
+  <view class="tr bg-w bold"><label>{{groupName}}：共{{total}}人</label></view>
 
   <block wx:for="{{nameList}}" wx:key="id">
     <view class="tr bg-g">
@@ -51,4 +68,7 @@
       <view class="td-x">{{item.name4}}</view>
     </view>
   </block>
+  <view class='bottom'>
+    <button class='btn del' bindtap="query">开始查询</button>
+  </view>
 </view>

@@ -16,7 +16,7 @@
         <switch bindchange="solitaireActivation" data-id="{{item._id}}" checked="{{item.activation}}"></switch>
       </view>
       <view class="td-4">
-        <image src='/images/delete.jpg' class="deleteImage" catchtap='solitaireDelete' data-id="{{item._id}}"></image>
+        <image src='/images/delete.jpg' class="deleteImage" catchtap='solitaireDelete' data-id="{{item._id}}" data-activation="{{item.activation}}"></image>
       </view>
     </view>
     <view class="tr bg-g2" wx:else>
@@ -26,7 +26,7 @@
         <switch bindchange="solitaireActivation" data-id="{{item._id}}" checked="{{item.activation}}"></switch>
       </view>
       <view class="td-4">
-        <image src='/images/delete.jpg' class="deleteImage" catchtap='solitaireDelete' data-id="{{item._id}}"></image>
+        <image src='/images/delete.jpg' class="deleteImage" catchtap='solitaireDelete' data-id="{{item._id}}" data-activation="{{item.activation}}"></image>
       </view>
     </view>
   </block>
@@ -42,7 +42,7 @@
       </view>
 
       <view class='row'>
-        <textarea maxlength="-1" class='text' name="roster" placeholder="复制一个完整的接龙数据，粘贴在此处" />
+        <textarea maxlength="-1" class='text' name="roster" placeholder="复制一个全员的接龙数据，粘贴在此处" />
       </view>
 
       <view class='bottom'>
