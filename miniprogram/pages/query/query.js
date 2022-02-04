@@ -6,10 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    
   },
-
-
 
   onSubmit: function (e) {
     let name = e.detail.value.name.replace(/(^\s*)|(\s*$)/g, "");
@@ -229,11 +227,13 @@ Page({
         let solitaireList = res.data;
         if (solitaireList.length == 0) {
           this.setData({
+            noSolitaireFlag: false,
             initShow: true,
             solitaireShow: false
           })
         } else {
           this.setData({
+            noSolitaireFlag: false,
             name: solitaireList[0].name,
             nameServerArray: solitaireList[0].nameArray,
             solitaireShow: true
@@ -286,8 +286,7 @@ Page({
 
     this.setData({
       noSolitaireNameList: nameList,
-      noSolitaireTotal: nameArray.length,
-      noSolitaireFlag: true
+      noSolitaireTotal: nameArray.length
     })
   },
 
