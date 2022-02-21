@@ -248,6 +248,7 @@ Page({
     let nameList = [];
     let nameMap = {};
     let m = 0;
+    nameArray = nameArray.sort((a, b) => a.localeCompare(b));
     for (let x in nameArray) {
       m = m + 1;
       if (m == 1) {

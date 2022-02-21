@@ -163,6 +163,7 @@ Page({
     }).get({
       success: res => {
         let nameArray = res.data[0].nameArray;
+        nameArray = nameArray.sort((a, b) => a.localeCompare(b));
 
         let nameList = [];
         let nameMap = {};
