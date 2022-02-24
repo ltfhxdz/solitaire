@@ -1,3 +1,4 @@
+import pinyin from "wl-pinyin"
 const db = wx.cloud.database();
 
 Page({
@@ -8,6 +9,23 @@ Page({
   data: {
 
   },
+
+  sortChinese: function (arr) {
+    let length = arr.length;
+    for (let i = 0; i < length - 1; i++) {
+      for (let j = 0; j < length - 1; j++) {
+        let x1 = pinyin.getPinyin(arr[j]);
+        let x2 = pinyin.getPinyin(arr[j + 1]);
+        if (x1 > x2) {
+          let temp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = temp;
+        }
+      }
+    }
+    return arr;
+  },
+
 
   solitaireActivation: function (e) {
     if (!e.detail.value) {
@@ -110,7 +128,7 @@ Page({
     db.collection('solitaire').add({
       data: {
         name: name,
-        nameArray: nameArray.sort((a, b) => a.localeCompare(b)),
+        nameArray: this.sortChinese(nameArray),
         activation: activation,
         create_date: db.serverDate()
       },
@@ -163,7 +181,7 @@ Page({
     }).get({
       success: res => {
         let nameArray = res.data[0].nameArray;
-        nameArray = nameArray.sort((a, b) => a.localeCompare(b));
+        nameArray = this.sortChinese(nameArray);
 
         let nameList = [];
         let nameMap = {};

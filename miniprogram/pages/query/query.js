@@ -1,3 +1,4 @@
+import pinyin from "wl-pinyin"
 const db = wx.cloud.database();
 
 Page({
@@ -6,7 +7,23 @@ Page({
    * 页面的初始数据
    */
   data: {
-    
+
+  },
+
+  sortChinese: function (arr) {
+    let length = arr.length;
+    for (let i = 0; i < length - 1; i++) {
+      for (let j = 0; j < length - 1; j++) {
+        let x1 = pinyin.getPinyin(arr[j]);
+        let x2 = pinyin.getPinyin(arr[j + 1]);
+        if (x1 > x2) {
+          let temp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = temp;
+        }
+      }
+    }
+    return arr;
   },
 
   onSubmit: function (e) {
@@ -40,7 +57,7 @@ Page({
     db.collection('solitaire').add({
       data: {
         name: name,
-        nameArray: nameArray.sort((a, b) => a.localeCompare(b)),
+        nameArray: this.sortChinese(nameArray),
         activation: true,
         create_date: db.serverDate()
       },
@@ -229,14 +246,16 @@ Page({
           this.setData({
             noSolitaireFlag: false,
             initShow: true,
-            solitaireShow: false
+            solitaireShow: false,
+            groupFlag: false
           })
         } else {
           this.setData({
             noSolitaireFlag: false,
             name: solitaireList[0].name,
             nameServerArray: solitaireList[0].nameArray,
-            solitaireShow: true
+            solitaireShow: true,
+            groupFlag: false
           })
         }
 
@@ -248,7 +267,9 @@ Page({
     let nameList = [];
     let nameMap = {};
     let m = 0;
-    nameArray = nameArray.sort((a, b) => a.localeCompare(b));
+    // nameArray = nameArray.sort((a, b) => a.localeCompare(b));
+    nameArray = this.sortChinese(nameArray);
+
     for (let x in nameArray) {
       m = m + 1;
       if (m == 1) {
@@ -322,6 +343,7 @@ Page({
   onShow: function () {
     this.solitaireQuery();
   },
+
 
   /**
    * 生命周期函数--监听页面加载
