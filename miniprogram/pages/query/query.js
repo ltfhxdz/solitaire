@@ -250,13 +250,20 @@ Page({
             groupFlag: false
           })
         } else {
-          this.setData({
-            noSolitaireFlag: false,
-            name: solitaireList[0].name,
-            nameServerArray: solitaireList[0].nameArray,
-            solitaireShow: true,
-            groupFlag: false
-          })
+          if (this.data.noSolitaireFlag) {
+            this.setData({
+              noSolitaireFlag: true
+            })
+          } else {
+            this.setData({
+              noSolitaireFlag: false,
+              name: solitaireList[0].name,
+              nameServerArray: solitaireList[0].nameArray,
+              solitaireShow: true,
+              groupFlag: false
+            })
+          }
+
         }
 
       }
