@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    tableShow: true
   },
 
   sortChinese: function (arr) {
@@ -71,13 +71,17 @@ Page({
 
   add: function () {
     this.setData({
-      solitaireShow: true
+      solitaireShow: true,
+      tableShow: false,
+      groupFlag: false
     })
   },
 
   addCancel: function () {
     this.setData({
-      solitaireShow: false
+      solitaireShow: false,
+      tableShow: true,
+      groupFlag: true
     })
   },
 
@@ -89,14 +93,38 @@ Page({
     let flag = this.parameterJudge(name, roster);
     if (flag) {
       let nameArray = this.getNameArray(roster);
+      //名称唯一性判断
+      this.solitaireByName(name, nameArray);
 
-      this.solitaireAddDB(name, nameArray);
 
-      this.setData({
-        solitaireShow: false
-      })
     }
   },
+
+  solitaireByName: function (name, nameArray) {
+    db.collection('solitaire').where({
+      name: name
+    }).get({
+      success: res => {
+        if (res.data.length > 0) {
+          wx.showToast({
+            title: '名称已经存在',
+            icon: 'none',
+            duration: 2000,
+            mask: true
+          });
+
+        } else {
+          this.solitaireAddDB(name, nameArray);
+
+          this.setData({
+            solitaireShow: false
+          })
+        }
+      }
+    })
+  },
+
+
 
   solitaireDelete: function (e) {
     if (this.data.solitaireList.length > 1 && e.currentTarget.dataset.activation) {
@@ -226,7 +254,8 @@ Page({
           nameList: nameList,
           total: nameArray.length,
           groupName: res.data[0].name,
-          groupFlag: true
+          groupFlag: true,
+          tableShow: true
         })
       }
     })

@@ -1,4 +1,4 @@
-<view class="table">
+<view class="table" wx:if="{{tableShow}}">
   <view class="tr bg-w bold">
     <view class="td-1">序号</view>
     <view class="td-2">接龙群组名称</view>
