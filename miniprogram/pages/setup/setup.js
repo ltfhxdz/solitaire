@@ -80,9 +80,9 @@ Page({
   addCancel: function () {
     this.setData({
       solitaireShow: false,
-      tableShow: true,
-      groupFlag: true
+      tableShow: true
     })
+    this.solitaireQuery();
   },
 
 
@@ -298,11 +298,27 @@ Page({
     let nameArray = [];
     for (let x in rosterList) {
       let name = rosterList[x];
+      name = name.trim();
+      let count = this.count(name);
+      if (count > 1) {
+        let index = name.lastIndexOf(' ');
+        if (index > -1) {
+          name = name.substr(0, index);
+        }
+      }
+
       let nameList = name.split(".");
       nameArray.push(nameList[1].replace(/(^\s*)|(\s*$)/g, ""));
     }
 
     return nameArray;
+  },
+
+  count: function (str) {
+    let regex = new RegExp(' ', 'g');
+    let result = str.match(regex);
+    let count = !result ? 0 : result.length;
+    return count;
   },
 
   parameterJudge: function (name, roster) {
@@ -333,7 +349,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.solitaireQuery();
+    if (!this.data.solitaireShow) {
+      this.solitaireQuery();
+    }
   },
 
   /**
@@ -342,6 +360,8 @@ Page({
   onLoad: function (options) {
 
   },
+
+
 
   /**
    * 生命周期函数--监听页面初次渲染完成

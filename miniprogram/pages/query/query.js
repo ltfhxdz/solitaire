@@ -127,6 +127,7 @@ Page({
     })
   },
 
+
   getNameArray: function (roster) {
     let rosterList = roster.split("\n");
     let m = -1;
@@ -143,12 +144,29 @@ Page({
     let nameArray = [];
     for (let x in rosterList) {
       let name = rosterList[x];
+      name = name.trim();
+      let count = this.count(name);
+      if (count > 1) {
+        let index = name.lastIndexOf(' ');
+        if (index > -1) {
+          name = name.substr(0, index);
+        }
+      }
+
       let nameList = name.split(".");
       nameArray.push(nameList[1].replace(/(^\s*)|(\s*$)/g, ""));
     }
 
     return nameArray;
   },
+
+  count: function (str) {
+    let regex = new RegExp(' ', 'g');
+    let result = str.match(regex);
+    let count = !result ? 0 : result.length;
+    return count;
+  },
+
 
   parameterJudge: function (name, roster) {
     let flag = true;
@@ -257,6 +275,7 @@ Page({
           } else {
             this.setData({
               noSolitaireFlag: false,
+              initShow: false,
               name: solitaireList[0].name,
               nameServerArray: solitaireList[0].nameArray,
               solitaireShow: true,
@@ -313,9 +332,17 @@ Page({
       nameList.push(nameMap);
     }
 
+    let solitaireStr = '';
+    let noSolitaireTotal = nameArray.length;
+    if (noSolitaireTotal == 0) {
+      solitaireStr = "恭喜，全都接龙啦！";
+    } else {
+      solitaireStr = "共" + noSolitaireTotal + "人未接龙";
+    }
+
     this.setData({
       noSolitaireNameList: nameList,
-      noSolitaireTotal: nameArray.length
+      solitaireStr: solitaireStr
     })
   },
 

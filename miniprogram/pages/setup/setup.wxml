@@ -55,7 +55,7 @@
 
 
 <view class="table" wx:if="{{groupFlag}}">
-  <view class="tr bg-w bold"><label>{{groupName}}组，共{{total}}人</label></view>
+  <view class="tr bg-w bold"><label>{{groupName}}，共{{total}}人</label></view>
 
   <block wx:for="{{nameList}}" wx:key="id">
     <view class="tr bg-g">

@@ -41,7 +41,7 @@
 
 
 <view class="table" wx:if="{{noSolitaireFlag}}">
-  <view class="tr bg-w bold"><label>{{name}}：共{{noSolitaireTotal}}人未接龙</label></view>
+  <view class="tr bg-w bold"><label>{{name}}：{{solitaireStr}}</label></view>
 
   <block wx:for="{{noSolitaireNameList}}" wx:key="id">
     <view class="tr bg-g">
