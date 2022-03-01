@@ -311,7 +311,15 @@ Page({
       nameArray.push(nameList[1].replace(/(^\s*)|(\s*$)/g, ""));
     }
 
-    return nameArray;
+    //去重
+    let newArr = []
+    for (let i in nameArray) {
+      if (newArr.indexOf(nameArray[i]) === -1) {
+        newArr.push(nameArray[i])
+      }
+    }
+
+    return newArr;
   },
 
   count: function (str) {
