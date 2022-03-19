@@ -49,7 +49,8 @@ Page({
       noSolitaireFlag: false,
       solitaireShow: true,
       initShow: false,
-      groupFlag: false
+      groupFlag: false,
+      repeatFlag: false
     })
   },
 
@@ -237,14 +238,89 @@ Page({
           noSolitaireArray.push(nameServerArray[x]);
         }
       }
-
+      //数组转换
       this.arraySwitch(noSolitaireArray);
+
+      //重复提交的数据
+      this.repeat(nameArray, nameServerArray);
 
       this.setData({
         noSolitaireFlag: true,
         solitaireShow: false
       })
     }
+  },
+
+  repeat: function (inputArray, serverArray) {
+    let repeatArray = [];
+    for (let x in serverArray) {
+      let count = 0;
+      for (let y in inputArray) {
+        if (inputArray[y].indexOf(serverArray[x]) != -1) {
+          count++;
+        }
+      }
+
+      if (count > 1) {
+        repeatArray.push(serverArray[x] + count + "次");
+      }
+    }
+    this.repeatArraySwitch(repeatArray);
+  },
+
+
+  repeatArraySwitch: function (nameArray) {
+    let nameList = [];
+    let nameMap = {};
+    let m = 0;
+    // nameArray = nameArray.sort((a, b) => a.localeCompare(b));
+    nameArray = this.sortChinese(nameArray);
+
+    for (let x in nameArray) {
+      m = m + 1;
+      if (m == 1) {
+        nameMap['name1'] = nameArray[x];
+      } else if (m == 2) {
+        nameMap['name2'] = nameArray[x];
+      } else if (m == 3) {
+        nameMap['name3'] = nameArray[x];
+      } else if (m == 4) {
+        nameMap['name4'] = nameArray[x];
+        nameList.push(nameMap);
+        m = 0;
+        nameMap = {};
+      }
+    }
+
+    if (nameList.length * 4 < nameArray.length) {
+      if (typeof (nameArray[nameList.length * 4]) != "undefined") {
+        nameMap["name1"] = nameArray[nameList.length * 4];
+      }
+
+      if (typeof (nameArray[nameList.length * 4 + 1]) != "undefined") {
+        nameMap["name2"] = nameArray[nameList.length * 4 + 1];
+      }
+
+      if (typeof (nameArray[nameList.length * 4 + 2]) != "undefined") {
+        nameMap["name3"] = nameArray[nameList.length * 4 + 2];
+      }
+
+      if (typeof (nameArray[nameList.length * 4 + 3]) != "undefined") {
+        nameMap["name4"] = nameArray[nameList.length * 4 + 3];
+      }
+
+      nameList.push(nameMap);
+    }
+
+    let repeatFlag = false;
+    if (nameArray.length > 0) {
+      repeatFlag = true;
+    }
+
+    this.setData({
+      repeatList: nameList,
+      repeatFlag: repeatFlag
+    })
   },
 
   queryParameterJudge: function (roster) {

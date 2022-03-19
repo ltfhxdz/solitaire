@@ -57,6 +57,20 @@
 </view>
 
 
+<view class="table" wx:if="{{repeatFlag}}">
+  <view class="tr bg-w bold"><label>重复提交</label></view>
+
+  <block wx:for="{{repeatList}}" wx:key="id">
+    <view class="tr bg-g">
+      <view class="td-x">{{item.name1}}</view>
+      <view class="td-x">{{item.name2}}</view>
+      <view class="td-x">{{item.name3}}</view>
+      <view class="td-x">{{item.name4}}</view>
+    </view>
+  </block>
+</view>
+
+
 <view class="table" wx:if="{{groupFlag}}">
   <view class="tr bg-w bold"><label>{{groupName}}：共{{total}}人</label></view>
 
